@@ -14,6 +14,8 @@ const EditProfile = ({user}) => {
     const [about ,setAbout] = useState(user.about || "")
     const [error ,setError] = useState("")
     const [showToast , setShowToast] = useState(false)
+
+    const [skills, setSkills] = useState(user.skills ? user.skills.join(", ") : "");
     
     const dispatch = useDispatch();
 
@@ -28,6 +30,10 @@ const EditProfile = ({user}) => {
                     age,
                     gender,
                     about,
+                    skills: skills
+                            .split(",")
+                            .map((skill) => skill.trim())
+                            .filter(Boolean),
                 },
                 {withCredentials : true }
             )
@@ -112,15 +118,26 @@ const EditProfile = ({user}) => {
                     </fieldset>
 
                     <fieldset className="fieldset">
-                    <legend className="fieldset-legend">About:</legend>
-                    <input 
-                        type="text" 
-                        className="input" 
-                        placeholder="" 
-                        value={about}
-                        onChange={(e) => setAbout(e.target.value)}
-                    
-                    />
+                        <legend className="fieldset-legend">About:</legend>
+                        <input 
+                            type="text" 
+                            className="input" 
+                            placeholder="" 
+                            value={about}
+                            onChange={(e) => setAbout(e.target.value)}
+                        
+                        />
+                    </fieldset>
+
+                    <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Skills:</legend>
+                        <input
+                            type="text"
+                            className="input"
+                            placeholder="React, Node.js, MongoDB"
+                            value={skills}
+                            onChange={(e) => setSkills(e.target.value)}
+                        />
                     </fieldset>
 
                     
@@ -131,7 +148,7 @@ const EditProfile = ({user}) => {
                 </div>
                 </div>
             </div> 
-            <UserCard user={{firstName,lastName,photoUrl,age,gender,about}}/>
+            <UserCard user={{firstName,lastName,photoUrl,age,gender,about,skills: skills.split(",").map((s) => s.trim()).filter(Boolean)}}/>
             {showToast && <div className="toast toast-top toast-center">
                 <div className="alert alert-success">
                     <span>Profile updated successfully.</span>
