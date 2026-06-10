@@ -100,7 +100,7 @@ const Login = () => {
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Password:</legend>
               <input 
-                type="text" 
+                type="password" 
                 className="input" 
                 placeholder=""
                 value={password}
@@ -114,6 +114,7 @@ const Login = () => {
             </div>
 
             <p className='card-actions justify-center my-2 cursor-pointer' onClick={() => setIsLoggInForm(!isLoggInForm) }>{isLoggInForm ? "New User ? SignUp Here" : "Already User? Login Here"}</p>
+            {isLoggInForm && (<p className="text-blue-500 cursor-pointer text-sm mt-2 text-center" onClick={() => navigate("/forgot-password")}>Forgot Password?</p>)}
           </div>
         </div>
       </div>  

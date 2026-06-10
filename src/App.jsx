@@ -8,6 +8,7 @@ import appStore from "./utils/appStore"
 import Connections from "./components/Connections"
 import Requests from "./components/Requests"
 import Chat from "./components/Chat"
+import ForgotPassword from "./components/ForgotPassword"
  
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" element={<Feed />} /> 
               <Route path="/login" element={<Login />} />
               <Route path="/Profile" element={<Profile />} />
+              <Route path="/forgot-password" element={<ForgotPassword />}/>
               <Route path="/connections" element={<Connections />} />
               <Route path="/requests" element={<Requests />} />
               <Route path="/chat/:targetUserId" element={<Chat />} />
