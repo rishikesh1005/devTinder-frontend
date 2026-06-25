@@ -2,11 +2,13 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestsSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getErrorMessage } from "../utils/errorHandler";
 
 const Requests = () => {
     const requests = useSelector((store) => store.requests)
     const dispatch = useDispatch()
+    const [error, setError] = useState("");
 
     const reviewRequest = async ( status, _id ) => {
         try{
@@ -18,7 +20,7 @@ const Requests = () => {
             dispatch(removeRequest(_id))
         }
         catch(err){
-            console.log(err)
+            setError(getErrorMessage(err));
         }
     }
 
@@ -32,7 +34,7 @@ const Requests = () => {
             dispatch(addRequests(res?.data?.data))
         }
         catch(err){
-            console.log(err);
+            setError(getErrorMessage(err));
         }
     }
 
@@ -42,6 +44,17 @@ const Requests = () => {
 
 
     if(!requests) return;
+
+    if (error) {
+        return (
+            <div className="flex flex-col justify-center items-center my-8">
+                <h1 className="text-red-500 text-xl">
+                    {error}
+                </h1>
+            </div>
+        );
+    }
+
 
     if(requests.length === 0){
         return(

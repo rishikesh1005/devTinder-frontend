@@ -2,32 +2,43 @@ import { useState } from "react"
 import axios from "axios"
 import { BASE_URL } from "../utils/constant";
 import {useNavigate} from "react-router-dom"
+import { getErrorMessage } from "../utils/errorHandler";
 
 const ForgotPassword = () => {
     const [emailId , setEmailId] = useState("");
     const [newPassword , setNewPassword] = useState("");
     const [confirmPassword , setConfirmPassword] = useState("");
     const [error ,setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const navigate = useNavigate();
 
     const handlePasswordChange = async() => {
         try{
+          setError("");
+          setSuccess("");
 
-            await axios.patch( BASE_URL + "/profile/password",{
-                    emailId,
-                    newPassword,
-                    confirmPassword,
-                },
-                {   withCredentials : true }
-            )
+          if(newPassword !== confirmPassword){
+              setError("Passwords do not match");
+              return;
+          }
 
-            alert("Password Change Successfully!!!")
+          await axios.patch( BASE_URL + "/profile/password",{
+                  emailId,
+                  newPassword,
+                  confirmPassword,
+              },
+              {   withCredentials : true }
+          )
 
-            navigate("/login");
+          setSuccess("Password changed successfully!");
+
+          setTimeout(() => {
+              navigate("/login");
+          }, 1500);
         }
         catch(err){
-            setError(err?.response?.data);
+            setError(getErrorMessage(err));
         }
     }
 
@@ -63,7 +74,17 @@ const ForgotPassword = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
-          <p className="text-red-500">{error}</p>
+          {error && (
+            <p className="text-red-500">
+              {error}
+            </p>
+          )}
+
+          {success && (
+            <p className="text-green-500">
+              {success}
+            </p>
+          )}
 
           <button
             className="btn btn-primary"

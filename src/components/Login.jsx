@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../utils/constant';
+import { getErrorMessage } from "../utils/errorHandler";
 
 const Login = () => {
   const [emailId , setEmailId] = useState('');
@@ -29,7 +30,7 @@ const Login = () => {
       return navigate('/');
     }
     catch(err){
-      setError(err?.response?.data || "something went wrong!!!")
+      setError(getErrorMessage(err));
     }
   
   }
@@ -50,7 +51,7 @@ const Login = () => {
       return navigate("/profile")
     }
     catch(err){
-      setError(err?.response?.data || "something went wrong!!!")
+      setError(getErrorMessage(err));
     }
   }
 

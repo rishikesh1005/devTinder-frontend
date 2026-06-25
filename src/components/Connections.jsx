@@ -1,13 +1,15 @@
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constant";
 import { addConnections } from "../utils/connectionsSlice";
 import { Link } from "react-router-dom";
+import { getErrorMessage } from "../utils/errorHandler";
 
 const Connections = () => {
     const connections = useSelector((store) => store.connections) 
     const dispatch = useDispatch();
+    const [error, setError] = useState("");
 
     const fetchConnections = async () => {
         try{
@@ -17,7 +19,7 @@ const Connections = () => {
             dispatch(addConnections(res?.data?.data))
         }
         catch(err){
-            console.log(err)
+            setError(getErrorMessage(err));
         }
     };
     
@@ -26,6 +28,17 @@ const Connections = () => {
     } ,[]);
 
     if(!connections) return;
+
+    if (error) {
+        return (
+            <div className="flex flex-col justify-center items-center my-8">
+                <h1 className="text-red-500 text-xl">
+                    {error}
+                </h1>
+            </div>
+        );
+    }
+
 
     if(connections.length === 0){
        return(

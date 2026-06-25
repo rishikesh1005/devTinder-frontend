@@ -1,13 +1,15 @@
 import axios from "axios"
 import { BASE_URL } from "../utils/constant"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { addFeed } from "../utils/feedSlice"
 import UserCard from "./UserCard"
+import { getErrorMessage } from "../utils/errorHandler"
 
 const Feed = () => {
   const dispatch = useDispatch()
   const feed = useSelector((store) => store.feed)
+  const [error, setError] = useState("");
 
   const getFeed = async() => {
     if(feed) return;
@@ -16,7 +18,7 @@ const Feed = () => {
       dispatch(addFeed(res?.data?.data))
     }
     catch(err){
-      console.log(err);
+      setError(getErrorMessage(err));
     }
   }
 
@@ -24,7 +26,19 @@ const Feed = () => {
     getFeed();
   } , []);
 
+  if(error){
+    return (
+      <div className="flex justify-center my-10">
+        <div className="alert alert-error w-auto">
+          <span>{error}</span>
+        </div>
+      </div>
+    );
+  }
+
+
   if(!feed) return;
+
 
   if(feed.length <= 0){
     return(
@@ -35,11 +49,14 @@ const Feed = () => {
   }
 
   return (
-    feed && (
-      <div className="flex justify-center my-10">
-        <UserCard user={feed[0]}/>
-      </div>
-    )
+
+      feed && (
+        <div className="flex justify-center my-10">
+          <UserCard user={feed[0]}/>
+        </div>
+      )
+
+    
   )
 }
 

@@ -4,6 +4,7 @@ import axios from "axios"
 import { BASE_URL } from "../utils/constant"
 import { useDispatch } from "react-redux"
 import {addUser} from "../utils/userSlice"
+import { getErrorMessage } from "../utils/errorHandler"
 
 const EditProfile = ({user}) => {
     const [firstName ,setFirstName] = useState(user.firstName)
@@ -45,7 +46,7 @@ const EditProfile = ({user}) => {
             },2000)
         } 
         catch(err){
-            setError(err.response.data)
+            setError(getErrorMessage(err));
         }
     }
 
